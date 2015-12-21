@@ -3,10 +3,24 @@
 <head>
   <meta charset="utf-8">
   <title>Cat Clicker: Dual</title>
+</head>
+<body>
+  <div id="catContainer">
+  </div>
+
+  <template id="catTemplate" type="text/template">
+    <div class="cat">
+      <div class="catName">{{name}}</div>
+      <img src="http://lorempixel.com/400/300/cats/">
+    </div>
+    <div class="clickDisplay">
+    </div>
+  </template>
+
   <script>
-    // Our cat data
+    // Our cat data model
     var catUrl = 'http://lorempixel.com/400/300/cats/';
-    var catObjects = [
+    var cats = [
       {
         'name': 'Grimes',
         'url': catUrl,
@@ -17,37 +31,30 @@
         'clicks': 0
       }
     ];
-  </script>
-</head>
-<body>
-  <div id="catContainer">
-  </div>
-  <template id="catTemplate" type="text/template">
-    <div class="cat">
-      <div class="catName">{{name}}</div>
-      <img src="http://lorempixel.com/400/300/cats/">
-    </div>
-    <div class="clickDisplay">
-    </div>
-  </template>
-  <script>
-    var cats = catObjects;
-    // var display = document.getElementsByClassName('clickDisplay');
-    // var catContainer = document.getElementById('catContainer');
+    var catContainer = document.getElementById('catContainer');
     var catTemplate = document.getElementById('catTemplate');
-    // console.log(catTemplate.content);
-    var numClicks = 0;
-    var numCats = catObjects.length;
+    var numCats = cats.length;
     var c = catTemplate.content;
     var elem;
     for(var i = 0; i < numCats; i++){
       elem = document.importNode(c, true);
-      elem.querySelector('.catName').innerHTML = catObjects[i].name;
-
+      elem.querySelector('.catName').innerHTML = cats[i].name;
+      elem.querySelector('.clickDisplay').innerHTML = cats[i].clicks;
       catContainer.appendChild(elem);
-      elem.addEventListener('click', function(){
-        console.log('yo');
-      }, false);
+    }
+    // Now that the DOM elements are 'activated', bind event listeners
+    var kitties = document.getElementsByClassName('cat');
+    var numKitties = kitties.length;
+    for( k = 0; k < numKitties; k++){
+      // Need to have a closure Here
+      // TODO: Review closures
+      (function(o, v){
+        o.addEventListener('click',function(){
+          // TODO: update model
+          // TODO: update view
+          console.log(v);
+        });
+      })(kitties[k],k);
     }
   </script>
 
