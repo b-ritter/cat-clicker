@@ -22,32 +22,33 @@
 <body>
   <div id="catContainer">
   </div>
-  <script id="catTemplate" type="text/template">
+  <template id="catTemplate" type="text/template">
     <div class="cat">
       <div class="catName">{{name}}</div>
       <img src="http://lorempixel.com/400/300/cats/">
     </div>
     <div class="clickDisplay">
     </div>
-  </script>
+  </template>
   <script>
     var cats = catObjects;
-    var display = document.getElementsByClassName('clickDisplay');
-    var catContainer = document.getElementById('catContainer');
+    // var display = document.getElementsByClassName('clickDisplay');
+    // var catContainer = document.getElementById('catContainer');
     var catTemplate = document.getElementById('catTemplate');
+    // console.log(catTemplate.content);
     var numClicks = 0;
     var numCats = catObjects.length;
+    var c = catTemplate.content;
+    var elem;
     for(var i = 0; i < numCats; i++){
-      var html = catTemplate;
-      var c = html;
-      catContainer.appendChild(c);
+      elem = document.importNode(c, true);
+      elem.querySelector('.catName').innerHTML = catObjects[i].name;
+
+      catContainer.appendChild(elem);
+      elem.addEventListener('click', function(){
+        console.log('yo');
+      }, false);
     }
-    /*
-    cats[0].addEventListener('click', function(){
-      numClicks++;
-      display[0].innerHTML = numClicks;
-    }, false);
-    */
   </script>
 
 
