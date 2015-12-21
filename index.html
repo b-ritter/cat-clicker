@@ -2,22 +2,54 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Cat Clicker</title>
+  <title>Cat Clicker: Dual</title>
+  <script>
+    // Our cat data
+    var catUrl = 'http://lorempixel.com/400/300/cats/';
+    var catObjects = [
+      {
+        'name': 'Grimes',
+        'url': catUrl,
+        'clicks': 0
+      },{
+        'name': 'Ludwig',
+        'url': catUrl,
+        'clicks': 0
+      }
+    ];
+  </script>
 </head>
 <body>
-  <div class="cat">
-    <img src="http://lorempixel.com/400/300/cats/">
+  <div id="catContainer">
   </div>
-  <div class="clickDisplay">
-  </div>
+  <script id="catTemplate" type="text/template">
+    <div class="cat">
+      <div class="catName">{{name}}</div>
+      <img src="http://lorempixel.com/400/300/cats/">
+    </div>
+    <div class="clickDisplay">
+    </div>
+  </script>
   <script>
-    var cats = document.getElementsByClassName('cat');
+    var cats = catObjects;
     var display = document.getElementsByClassName('clickDisplay');
+    var catContainer = document.getElementById('catContainer');
+    var catTemplate = document.getElementById('catTemplate');
     var numClicks = 0;
+    var numCats = catObjects.length;
+    for(var i = 0; i < numCats; i++){
+      var html = catTemplate;
+      var c = html;
+      catContainer.appendChild(c);
+    }
+    /*
     cats[0].addEventListener('click', function(){
       numClicks++;
       display[0].innerHTML = numClicks;
     }, false);
+    */
   </script>
+
+
 </body>
 </html>
