@@ -19,7 +19,9 @@
 
   <script>
     // Our cat data model
+    
     var catUrl = 'http://lorempixel.com/400/300/cats/';
+    // TODO: build loop to generate data
     var cats = [
       {
         'name': 'Grimes',
@@ -34,21 +36,20 @@
 
     // Cat Controller
     var catController = {
-      setClicks: function(){
-
+      setClicks: function(cat, clicks){
+        cat.clicks = clicks;
       },
-      getClicks: function(){
-
+      getClicks: function(cat){
+        return cat.clicks;
+      },
+      setName: function(cat, name) {
+        cat.name = name;
       },
       getName: function(){
 
       },
       getCats: function(){
         return cats;
-      },
-      update: function(cat) {
-        for(var c = 0; c < cats.length; c++){
-        }
       }
     };
 
@@ -57,11 +58,10 @@
       init: function(){
         var catContainer = document.getElementById('catContainer');
         var catTemplate = document.getElementById('catTemplate');
-        this.render();
-        // Now that the DOM elements are 'activated', bind event listeners
-        this.attachClickHandlers();
+        this.loadTemplate();
+        this.bindData();
       },
-      render: function() {
+      loadTemplate: function() {
         var cats = catController.getCats();
         var numCats = cats.length;
         var c = catTemplate.content;
@@ -73,22 +73,24 @@
       },
       // TODO: Separate out a function to wrap closures around elements
       // from the rendering of data
-      attachClickHandlers: function(){
+      bindData: function(){
         var kitties = document.getElementsByClassName('cat');
-        var numKitties = kitties.length;
-        for( k = 0; k < numKitties; k++){
+        var self = this;
+        for (var k = 0, numKitties = kitties.length; k < numKitties; k++){
           // TODO: Review closures
           (function(catObj, k){
             catObj.name = cats[k].name;
-            catObj.querySelector('.catName').innerHTML = cats[k].name;
-            catObj.querySelector('.clickDisplay').innerHTML = cats[k].clicks;
             catObj.clicks = cats[k].clicks;
+            catObj.querySelector('.catName').innerHTML = catObj.name;
+            catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
             catObj.addEventListener('click',function(){
               catObj.clicks++;
               catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
             });
           })(kitties[k],k);
         }
+      },
+      render: function() {
       }
     };
 
