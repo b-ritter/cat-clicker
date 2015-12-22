@@ -11,7 +11,7 @@
   <template id="catTemplate" type="text/template">
     <div class="cat">
       <div class="catName">{{name}}</div>
-      <img src="http://lorempixel.com/400/300/cats/">
+      <img src="">
       <div class="clickDisplay">
       </div>
     </div>
@@ -19,35 +19,24 @@
 
   <script>
     // Our cat data model
-    
-    var catUrl = 'http://lorempixel.com/400/300/cats/';
-    // TODO: build loop to generate data
-    var cats = [
-      {
-        'name': 'Grimes',
-        'url': catUrl,
+    var cats = [];
+    var catNames = ['Ludwig', 'Grimes', 'Prince', 'Miles', 'Pete',
+    'Wolfgang', 'Pierre', 'Pablo'];
+    var catUrl = 'images/lorempixel-cxx.jpg';
+    var imageIndexNum;
+    for (var i = 0, numCats = catNames.length; i < numCats; i++){
+      var newUrl = catUrl.split('xx');
+      imageIndexNum = i + 1;
+      newUrl.splice(1, 0, ( imageIndexNum < 10 ? ("0" + imageIndexNum) : imageIndexNum ) );
+      cats.push({
+        'name': catNames[i],
+        'url': newUrl.join(''),
         'clicks': 0
-      },{
-        'name': 'Ludwig',
-        'url': catUrl,
-        'clicks': 0
-      }
-    ];
+      });
+    }
 
     // Cat Controller
     var catController = {
-      setClicks: function(cat, clicks){
-        cat.clicks = clicks;
-      },
-      getClicks: function(cat){
-        return cat.clicks;
-      },
-      setName: function(cat, name) {
-        cat.name = name;
-      },
-      getName: function(){
-
-      },
       getCats: function(){
         return cats;
       }
@@ -55,11 +44,13 @@
 
     // Cat view
     var catView = {
+      'ks': [],
       init: function(){
         var catContainer = document.getElementById('catContainer');
         var catTemplate = document.getElementById('catTemplate');
         this.loadTemplate();
         this.bindData();
+        console.log(this.ks);
       },
       loadTemplate: function() {
         var cats = catController.getCats();
@@ -81,17 +72,25 @@
           (function(catObj, k){
             catObj.name = cats[k].name;
             catObj.clicks = cats[k].clicks;
+            catObj.url = cats[k].url;
+            // How do we separate the view from the data binding?
             catObj.querySelector('.catName').innerHTML = catObj.name;
+            var url = catObj.getElementsByTagName('img');
+            url[0].setAttribute('src', catObj.url);
             catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
             catObj.addEventListener('click',function(){
               catObj.clicks++;
               catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
             });
+            self.ks.push(catObj);
           })(kitties[k],k);
         }
-      },
+      }
+      /* TODO: Add render function. How do we access the objects we made in bindData?
+      ,
       render: function() {
       }
+      */
     };
 
     catView.init();
