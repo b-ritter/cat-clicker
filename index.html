@@ -6,95 +6,22 @@
 </head>
 <body>
   <div id="catContainer">
+    <div>
+      <ul id="catButtonContainer">
+      </ul>
+    </div>
+    <div id="catViewer">
+    </div>
   </div>
 
-  <template id="catTemplate" type="text/template">
-    <div class="cat">
-      <div class="catName">{{name}}</div>
-      <img src="">
-      <div class="clickDisplay">
-      </div>
-    </div>
+  <template id="catViewerTemplate" type="text/template">
+    <div class="catName">{{name}}</div>
+    <img src="">
+    <div class="clickDisplay"></div>
   </template>
-
-  <script>
-    // Our cat data model
-    var cats = [];
-    var catNames = ['Ludwig', 'Grimes', 'Prince', 'Miles', 'Pete',
-    'Wolfgang', 'Pierre', 'Pablo'];
-    var catUrl = 'images/lorempixel-cxx.jpg';
-    var imageIndexNum;
-    for (var i = 0, numCats = catNames.length; i < numCats; i++){
-      var newUrl = catUrl.split('xx');
-      imageIndexNum = i + 1;
-      newUrl.splice(1, 0, ( imageIndexNum < 10 ? ("0" + imageIndexNum) : imageIndexNum ) );
-      cats.push({
-        'name': catNames[i],
-        'url': newUrl.join(''),
-        'clicks': 0
-      });
-    }
-
-    // Cat Controller
-    var catController = {
-      getCats: function(){
-        return cats;
-      }
-    };
-
-    // Cat view
-    var catView = {
-      // This will be a collection of DOM elements with additional data
-      'ks': [],
-      init: function(){
-        var catContainer = document.getElementById('catContainer');
-        var catTemplate = document.getElementById('catTemplate');
-        this.loadTemplate();
-        this.bindData();
-        this.render();
-      },
-      loadTemplate: function() {
-        var cats = catController.getCats();
-        var numCats = cats.length;
-        var c = catTemplate.content;
-        var elem;
-        for(var i = 0; i < numCats; i++){
-          elem = document.importNode(c, true);
-          catContainer.appendChild(elem);
-        }
-      },
-      // TODO: Separate out a function to wrap closures around elements
-      // from the rendering of data
-      bindData: function(){
-        var kitties = document.getElementsByClassName('cat');
-        var self = this;
-        for (var k = 0, numKitties = kitties.length; k < numKitties; k++){
-          (function(catObj, k){
-            catObj.name = cats[k].name;
-            catObj.clicks = cats[k].clicks;
-            catObj.url = cats[k].url;
-            catObj.addEventListener('click',function(){
-              catObj.clicks++;
-              catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
-            });
-            self.ks.push(catObj);
-          })(kitties[k],k);
-        }
-      },
-      render: function() {
-        var currentCat;
-        for (var i = 0, numCats = this.ks.length; i < numCats; i++ ) {
-          currentCat = this.ks[i];
-          currentCat.querySelector('.catName').innerHTML = currentCat.name;
-          currentCat.querySelector('.clickDisplay').innerHTML = currentCat.clicks;
-          var url = currentCat.getElementsByTagName('img');
-          url[0].setAttribute('src', currentCat.url);
-        }
-      }
-    };
-
-    catView.init();
-
-  </script>
+  <template id="catListTemplate" type="text/template">
+      <li><a href="#" class="catButtonName">{{name}}</a></li>
+  </template>
+  <script src="js/app.js"></script>
 </body>
 </html>
