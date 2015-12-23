@@ -44,13 +44,13 @@
 
     // Cat view
     var catView = {
+      // This will be a collection of DOM elements with additional data
       'ks': [],
       init: function(){
         var catContainer = document.getElementById('catContainer');
         var catTemplate = document.getElementById('catTemplate');
         this.loadTemplate();
         this.bindData();
-        // this.changeRandom();
         this.render();
       },
       loadTemplate: function() {
@@ -69,7 +69,6 @@
         var kitties = document.getElementsByClassName('cat');
         var self = this;
         for (var k = 0, numKitties = kitties.length; k < numKitties; k++){
-          // TODO: Review closures
           (function(catObj, k){
             catObj.name = cats[k].name;
             catObj.clicks = cats[k].clicks;
@@ -92,7 +91,6 @@
           url[0].setAttribute('src', currentCat.url);
         }
       }
-
     };
 
     catView.init();
