@@ -24,6 +24,11 @@ var catController = {
 };
 
 // Cat app view
+var catApp = {
+  // currentCat undefined for now, but initialize it as random
+  currentCat: undefined
+  
+};
 // When you click on a cat name, it appears in the viewer
 
 // Cat list view
