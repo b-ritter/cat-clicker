@@ -51,10 +51,9 @@ var catListView = {
   },
   render: function(){
     this.bind();
-    document.
+    this.kats = document.querySelectorAll('.catButtonContainer');
     for (var i = 0, numKats = this.kats.length; i < numKats; i++){
-      console.log(this.kats[i]);
-      // this.kats[i].querySelector('.catButtonName').innerHTML = this.kats[i].name;
+      this.kats[i].querySelector('.catButtonName').innerHTML = this.kats[i].name;
     }
   }
 };
