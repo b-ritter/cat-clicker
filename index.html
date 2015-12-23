@@ -50,7 +50,7 @@
         var catTemplate = document.getElementById('catTemplate');
         this.loadTemplate();
         this.bindData();
-        console.log(this.ks);
+        this.changeRandom();
       },
       loadTemplate: function() {
         var cats = catController.getCats();
@@ -85,6 +85,13 @@
             self.ks.push(catObj);
           })(kitties[k],k);
         }
+      },
+      changeRandom: function() {
+        var numCats = this.ks.length;
+        var random = Math.floor( Math.random() * numCats );
+        // console.log(this.ks[random]);
+        var oneCat = this.ks[random];
+        oneCat.querySelector('.catName').innerHTML = '<b>FOO</b>';
       }
       /* TODO: Add render function. How do we access the objects we made in bindData?
       ,
