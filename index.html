@@ -50,7 +50,8 @@
         var catTemplate = document.getElementById('catTemplate');
         this.loadTemplate();
         this.bindData();
-        this.changeRandom();
+        // this.changeRandom();
+        this.render();
       },
       loadTemplate: function() {
         var cats = catController.getCats();
@@ -73,11 +74,6 @@
             catObj.name = cats[k].name;
             catObj.clicks = cats[k].clicks;
             catObj.url = cats[k].url;
-            // How do we separate the view from the data binding?
-            catObj.querySelector('.catName').innerHTML = catObj.name;
-            var url = catObj.getElementsByTagName('img');
-            url[0].setAttribute('src', catObj.url);
-            catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
             catObj.addEventListener('click',function(){
               catObj.clicks++;
               catObj.querySelector('.clickDisplay').innerHTML = catObj.clicks;
@@ -86,18 +82,17 @@
           })(kitties[k],k);
         }
       },
-      changeRandom: function() {
-        var numCats = this.ks.length;
-        var random = Math.floor( Math.random() * numCats );
-        // console.log(this.ks[random]);
-        var oneCat = this.ks[random];
-        oneCat.querySelector('.catName').innerHTML = '<b>FOO</b>';
-      }
-      /* TODO: Add render function. How do we access the objects we made in bindData?
-      ,
       render: function() {
+        var currentCat;
+        for (var i = 0, numCats = this.ks.length; i < numCats; i++ ) {
+          currentCat = this.ks[i];
+          currentCat.querySelector('.catName').innerHTML = currentCat.name;
+          currentCat.querySelector('.clickDisplay').innerHTML = currentCat.clicks;
+          var url = currentCat.getElementsByTagName('img');
+          url[0].setAttribute('src', currentCat.url);
+        }
       }
-      */
+
     };
 
     catView.init();
