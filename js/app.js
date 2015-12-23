@@ -20,6 +20,7 @@ var catController = {
   getCats: function(){
     return cats;
   }
+
 };
 
 // Cat app view
@@ -34,24 +35,34 @@ var catListView = {
   init: function(){
     var currentCat = this._data[Math.floor( Math.random() * this._data.length)];
     this.render();
-    catView.render(currentCat);
+    catView.init(currentCat);
   },
-  bind: function(){
+  loadTemplate: function(){
     var newElement;
     var self = this;
     for (var i = 0, numCats = this._data.length; i < numCats; i++){
+      newElement = document.importNode(self._template.content, true);
+      self._el.appendChild(newElement);
+    }
+  },
+  bind: function(){
+    this.kats = document.querySelectorAll('.catButtonContainer');
+    var self = this;
+    for( var i = 0, numKats = this.kats.length; i < numKats; i++){
       (function(k){
-        newElement = document.importNode(self._template.content, true);
-        newElement.name = k.name;
-        newElement.url = k.url;
-        newElement.clicks = k.clicks;
-        self._el.appendChild(newElement);
-      })(this._data[i]);
+        k.name = self._data[i].name;
+        k.url = self._data[i].url;
+        k.clicks = self._data[i].clicks;
+        k.addEventListener('click', function(){
+            catView.render(k);
+          }
+        );
+      })(this.kats[i]);
     }
   },
   render: function(){
+    this.loadTemplate();
     this.bind();
-    this.kats = document.querySelectorAll('.catButtonContainer');
     for (var i = 0, numKats = this.kats.length; i < numKats; i++){
       this.kats[i].querySelector('.catButtonName').innerHTML = this.kats[i].name;
     }
@@ -59,10 +70,20 @@ var catListView = {
 };
 // Cat image view
 var catView = {
-  _template: document.getElementById('catViewerTemplate'),
+  _template: document.getElementById('catViewerTemplate').content,
   _el: document.getElementById('catViewer'),
-  render: function(cat){
+  init: function(cat) {
+    var newElement = document.importNode(this._template, true);
+    this._el.appendChild(newElement);
+    this._el.querySelector('.catImg').addEventListener('click', function(){
 
+    });
+    this.render(cat);
+  },
+  render: function(cat) {
+    this._el.querySelector('.catName').innerHTML = cat.name;
+    this._el.querySelector('.catImg').setAttribute('src', cat.url);
+    this._el.querySelector('.clickDisplay').innerHTML = cat.clicks;
   }
 };
 
