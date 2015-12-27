@@ -55,7 +55,7 @@ catApp.Controller = {
   getData: function(){
     return this.model.getData();
   },
-  getRandomItem: function(){
+  getRandomItem: function() {
     var randNum = Math.floor(Math.random() * this.model.getNumberOfItems());
     return this.model.getItemByNumber(randNum);
   },
@@ -72,14 +72,50 @@ catApp.Controller = {
   }
 };
 
+catApp.ListView = {
+  controller: catApp.Controller,
+  _el: document.getElementById('catButtonContainer'),
+  _template: document.getElementById('catListTemplate').content,
+  init: function() {
+    // this.render();
+    console.log('list viewer');
+  },
+  render: function() {
+    var items = this.controller.getAllItems();
+    items.forEach(function(currentItem, index) {
+      (function(){
+
+      })();
+    });
+  }
+};
+
+catApp.ImageView = {
+  controller: catApp.Controller,
+  _el: '',
+  _template: '',
+  init: function() {
+    console.log('image viewer');
+  },
+  render: function() {
+
+  }
+};
 
 catApp.View = {
   controller: catApp.Controller,
-  init: function(){
+  views: [catApp.ListView, catApp.ImageView],
+  init: function() {
     // console.log(this.controller.getRandomItem());
     // this.test();
+    this.views.forEach(function(item){
+      item.init();
+    });
   },
-  test: function(){
+  render: function() {
+
+  },
+  test: function() {
     var item = this.controller.getItemByName('Grimes');
     console.log(item);
     this.controller.updateItem(item.name);
