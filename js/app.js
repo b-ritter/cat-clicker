@@ -43,6 +43,9 @@ catApp.Model = {
       }
     }
   },
+  getItemByIndex: function(i) {
+    return this._data[i];
+  },
   updateClicks: function(name) {
     var item = this.getItemByName(name);
     item.clicks++;
@@ -52,20 +55,18 @@ catApp.Model = {
 // Cat Controller
 catApp.Controller = {
   model: catApp.Model,
-  getData: function(){
-    return this.model.getData();
-  },
   getRandomItem: function() {
     var randNum = Math.floor(Math.random() * this.model.getNumberOfItems());
     return this.model.getItemByNumber(randNum);
   },
   getAllItems: function() {
-    for(var i = 0, num = this.model.getNumberOfItems(); i < num; i++){
-      // console.log(this.model.getItemByNumber(i));
-    }
+    return this.model.getData();
   },
   getItemByName: function(name) {
     return this.model.getItemByName(name);
+  },
+  getItemByIndex: function(i) {
+    return this.model.getItemByIndex(i);
   },
   updateItem: function(name) {
     this.model.updateClicks(name);
@@ -74,52 +75,57 @@ catApp.Controller = {
 
 catApp.ListView = {
   controller: catApp.Controller,
-  _el: document.getElementById('catButtonContainer'),
   _template: document.getElementById('catListTemplate').content,
+  _el: document.getElementById('catButtonContainer'),
   init: function() {
-    // this.render();
-    console.log('list viewer');
+    var items = this.controller.getAllItems();
+    var newElement;
+    var self = this;
+    items.forEach( function() {
+      newElement = document.importNode(self._template, true);
+      self._el.appendChild(newElement);
+    });
+    this.render();
   },
   render: function() {
-    var items = this.controller.getAllItems();
-    items.forEach(function(currentItem, index) {
-      (function(){
-
-      })();
-    });
+    var self = this;
+    var listItems = this._el.getElementsByTagName('li');
+    // console.log(listItems.length);
+    for( var i = 0, numListItems = listItems.length; i < numListItems; i++ ){
+      (function(i_temp){
+        var item = listItems[i_temp];
+        var data = self.controller.getItemByIndex(i_temp);
+        item.querySelector('.catButtonName').innerHTML = 'cat ' + i_temp;
+        item.addEventListener('click', function(){
+          catApp.currentCat = data;
+          catApp.ImageView.update();
+        });
+      })(i);
+    }
   }
 };
 
 catApp.ImageView = {
   controller: catApp.Controller,
-  _el: '',
-  _template: '',
+  _template: document.getElementById('catViewerTemplate').content,
+  _el: document.getElementById('catViewer'),
   init: function() {
     console.log('image viewer');
   },
   render: function() {
 
+  },
+  update: function() {
+    console.log(catApp.currentCat);
   }
 };
 
 catApp.View = {
-  controller: catApp.Controller,
   views: [catApp.ListView, catApp.ImageView],
   init: function() {
-    // console.log(this.controller.getRandomItem());
-    // this.test();
     this.views.forEach(function(item){
       item.init();
     });
-  },
-  render: function() {
-
-  },
-  test: function() {
-    var item = this.controller.getItemByName('Grimes');
-    console.log(item);
-    this.controller.updateItem(item.name);
-    console.log(item);
   }
 };
 
