@@ -1,4 +1,5 @@
 // Our cat data model
+// Simulates a JSON-like source
 var cats = [];
 var catNames = ['Ludwig', 'Grimes', 'Prince', 'Miles', 'Pete',
 'Wolfgang', 'Pierre', 'Pablo'];
@@ -15,25 +16,28 @@ for (var i = 0, numCats = catNames.length; i < numCats; i++){
   });
 }
 
-// Cat Controller
-var catController = {
-  getCats: function(){
-    return cats;
-  }
 
-};
 
 // Cat app view
 var catApp = {
   // currentCat undefined for now, but initialize it as random
   currentCat: undefined
-  
+
 };
+
+// Cat Controller
+catApp.catController = {
+  cats: cats,
+  getCats: function(){
+    return this.cats;
+  }
+};
+
 // When you click on a cat name, it appears in the viewer
 
 // Cat list view
 var catListView = {
-  _data: catController.getCats(),
+  _data: catApp.catController.getCats(),
   _template: document.getElementById('catListTemplate'),
   _el: document.getElementById('catButtonContainer'),
   kats: [],
