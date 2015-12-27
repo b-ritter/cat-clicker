@@ -25,16 +25,59 @@ var catApp = {
 
 };
 
-// Cat Controller
-catApp.catController = {
-  cats: cats,
-  getCats: function(){
-    return this.cats;
+
+catApp.Model = {
+  _data: cats,
+  getData: function(){
+    return this._data;
+  },
+  getNumberOfItems: function() {
+    return this._data.length;
+  },
+  getItemByNumber: function(n) {
+    return this._data[n];
+  },
+  getItemByName: function(name) {
+    for(var i = 0, items = this.getNumberOfItems(); i < items; i++){
+      if( name === this._data[i].name){
+        return this._data[i];
+      }
+    }
   }
 };
 
-// When you click on a cat name, it appears in the viewer
+// Cat Controller
+catApp.Controller = {
+  model: catApp.Model,
+  getData: function(){
+    return this.model.getData();
+  },
+  getRandomItem: function(){
+    var randNum = Math.floor(Math.random() * this.model.getNumberOfItems());
+    return this.model.getItemByNumber(randNum);
+  },
+  getAllItems: function() {
+    for(var i = 0, num = this.model.getNumberOfItems(); i < num; i++){
+      // console.log(this.model.getItemByNumber(i));
+    }
+  },
+  getItemByName: function(name) {
+    return this.model.getItemByName(name);
+  }
+};
 
+catApp.View = {
+  controller: catApp.Controller,
+  init: function(){
+    // console.log(this.controller.getRandomItem());
+    // console.log(this.controller.getItemByName('Grimes'));
+  }
+};
+
+catApp.View.init();
+
+// When you click on a cat name, it appears in the viewer
+/*
 // Cat list view
 var catListView = {
   _data: catApp.catController.getCats(),
@@ -97,3 +140,4 @@ var catView = {
 };
 
 catListView.init();
+*/
