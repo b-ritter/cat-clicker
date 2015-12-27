@@ -16,11 +16,10 @@ for (var i = 0, numCats = catNames.length; i < numCats; i++){
   });
 }
 
-
-
 // Cat app view
 var catApp = {
   // currentCat undefined for now, but initialize it as random
+  // keeps track of state
   currentCat: undefined
 
 };
@@ -43,6 +42,10 @@ catApp.Model = {
         return this._data[i];
       }
     }
+  },
+  updateClicks: function(name) {
+    var item = this.getItemByName(name);
+    item.clicks++;
   }
 };
 
@@ -63,14 +66,24 @@ catApp.Controller = {
   },
   getItemByName: function(name) {
     return this.model.getItemByName(name);
+  },
+  updateItem: function(name) {
+    this.model.updateClicks(name);
   }
 };
+
 
 catApp.View = {
   controller: catApp.Controller,
   init: function(){
     // console.log(this.controller.getRandomItem());
-    // console.log(this.controller.getItemByName('Grimes'));
+    // this.test();
+  },
+  test: function(){
+    var item = this.controller.getItemByName('Grimes');
+    console.log(item);
+    this.controller.updateItem(item.name);
+    console.log(item);
   }
 };
 
