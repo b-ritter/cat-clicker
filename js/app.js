@@ -62,14 +62,18 @@ catApp.Controller = {
   getAllItems: function() {
     return this.model.getData();
   },
-  getItemByName: function(name) {
-    return this.model.getItemByName(name);
-  },
   getItemByIndex: function(i) {
     return this.model.getItemByIndex(i);
   },
+  getCurrentCat: function() {
+    return catApp.currentCat;
+  },
   updateItem: function(name) {
     this.model.updateClicks(name);
+  },
+  updateView: function(data) {
+    catApp.currentCat = data;
+    catApp.ImageView.update();
   }
 };
 
@@ -95,10 +99,9 @@ catApp.ListView = {
       (function(i_temp){
         var item = listItems[i_temp];
         var data = self.controller.getItemByIndex(i_temp);
-        item.querySelector('.catButtonName').innerHTML = 'cat ' + i_temp;
+        item.querySelector('.catButtonName').innerHTML = self.controller.getItemByIndex(i_temp).name;
         item.addEventListener('click', function(){
-          catApp.currentCat = data;
-          catApp.ImageView.update();
+          self.controller.updateView(data);
         });
       })(i);
     }
@@ -110,22 +113,35 @@ catApp.ImageView = {
   _template: document.getElementById('catViewerTemplate').content,
   _el: document.getElementById('catViewer'),
   init: function() {
-    console.log('image viewer');
-  },
-  render: function() {
-
+    var self = this;
+    var newElement = document.importNode(this._template, true);
+    this._el.appendChild(newElement);
+    var img = this._el.querySelector('.catImg');
+    img.addEventListener('click', function(){
+      self.controller.updateItem(self.controller.getCurrentCat().name);
+      self.updateClicks();
+    });
   },
   update: function() {
-    console.log(catApp.currentCat);
+    var item = this.controller.getCurrentCat();
+    this._el.querySelector('.catName').innerHTML = item.name;
+    this.updateClicks();
+    this._el.querySelector('.catImg').setAttribute('src', item.url);
+  },
+  updateClicks: function() {
+    var item = this.controller.getCurrentCat();
+    this._el.querySelector('.clickDisplay').innerHTML = item.clicks;
   }
 };
 
 catApp.View = {
+  controller: catApp.Controller,
   views: [catApp.ListView, catApp.ImageView],
   init: function() {
     this.views.forEach(function(item){
       item.init();
     });
+    this.controller.updateView(this.controller.getRandomItem());
   }
 };
 
